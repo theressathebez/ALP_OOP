@@ -86,10 +86,13 @@ public class Appflow {
     
     // menu after logging in
     public void menu() {
+        
         System.out.println("0. Logout");
+        
         int choice = errorHandling(0, 1);
         switch(choice){
             case 0:
+                break;
         }
     }
 
