@@ -9,6 +9,8 @@
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Test");
+        Appflow app = new Appflow();
+        
+        app.start();
     }
 }
