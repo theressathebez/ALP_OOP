@@ -1,12 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author Felicia
- */
-public class Task {
-    
+import java.util.Date;
+
+public class Task extends Item {
+
+    private Date deadline;
+
+    public Task(String title, String desc, String category, Date deadline) {
+        super(title, desc, category);
+        this.deadline = deadline;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
 }

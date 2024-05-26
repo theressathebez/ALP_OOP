@@ -1,44 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author Felicia
- */
 public class User {
-    protected String name, username, password;
-    
-    public User(){
-        this.name = name;
-        this.username = username;
-        this.password = password;
+    private String Name,Username, Password;
+
+    public User() {
+        this.Name = " ";
+        this.Username = " ";
+        this.Password = " ";
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String Name) {
+        this.Name = Name;
     }
 
     public String getUsername() {
-        return username;
+        return Username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String Username) {
+        this.Username = Username;
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String Password) {
+        this.Password = Password;
     }
-    
-    
 }

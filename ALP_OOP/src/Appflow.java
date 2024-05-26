@@ -1,28 +1,26 @@
 
 import java.util.*;
+import java.text.*;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-/**
- *
- * @author Felicia
- */
 public class Appflow {
-    
+
     Scanner s = new Scanner(System.in);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     // list of all user registered
     ArrayList<User> users = new ArrayList<>();
-    
+
     //user rn
     User currentUser = new User();
     
+    //manage task and schedule
+    Manage manage = new Manage();
+
     // boarding
     public void start() {
-        System.out.println("STUDY ASSISTANT");
-        System.out.println("Welcome!");
+        System.out.println("### STUDY ASSISTANT ###");
+        System.out.println("####### WELCOME #######");
+        System.out.println(" ");
         loginRegister();
     }
 
@@ -35,6 +33,7 @@ public class Appflow {
             System.out.println("0. Exit");
             System.out.print("Choice: ");
             int choice = errorHandling(0, 2);
+            System.out.println("======================");
             switch (choice) {
                 case 1:
                     // register
@@ -73,32 +72,165 @@ public class Appflow {
         String username = s.next() + s.nextLine();
         System.out.print("Password: ");
         String password = s.next() + s.nextLine();
-        for(User user : users){
-            if (username.equals(user.getUsername()) && password.equals(user.getPassword())){
-                System.out.println("Login Successful! Welcome back " + user.getName());
+        for (User user : users) {
+            if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+                System.out.println("Login Successful! Welcome back " + user.getName() + "~");
+                System.out.println(" ");
                 currentUser = user;
                 menu();
                 return;
             }
         }
         System.out.println("User not found!");
+        System.out.println(" ");
     }
-    
+
     // menu after logging in
     public void menu() {
-        
-        System.out.println("0. Logout");
-        
-        int choice = errorHandling(0, 1);
-        switch(choice){
+        while (true) {
+            System.out.println("== MY STUDY ASSISTANT ==");
+            dashboard();
+            System.out.println(" ");
+            System.out.println("========= MENU =========");
+            System.out.println("1. Task");
+            System.out.println("2. Schedule");
+            System.out.println("3. Calendar");
+            System.out.println("0. Logout");
+            System.out.print("Choice: ");
+            int choice = errorHandling(0, 3);
+            System.out.println("========================");
+            switch (choice) {
+                case 0:
+                    loginRegister();
+                    break;
+                case 1:
+                    task();
+                    break;
+                case 2:
+                    schedule();
+                    break;
+                case 3:
+                    calendar();
+                    break;
+            }
+        }
+
+    }
+
+    // dashboard
+    public void dashboard() {
+
+    }
+
+    // menu 1: task
+    public void task() {
+        System.out.println("========= TASK =========");
+        System.out.println("1. Create task");
+        System.out.println("2. Edit task");
+        System.out.println("3. Delete task");
+        System.out.println("4. View all task");
+        System.out.println("0. Back");
+        System.out.print("Choice: ");
+        int choice = errorHandling(0, 4);
+        System.out.println("========================");
+        switch (choice) {
             case 0:
+                menu();
+                break;
+            case 1:
+                createTask();
+                break;
+            case 2:
+                editTask();
+                break;
+            case 3:
+                delTask();
+                break;
+            case 4:
+                viewTask();
                 break;
         }
     }
 
-    // dashboard
-    public void dashboard(){
-        
+    public void createTask() {
+        System.out.print("Enter title: ");
+        String title = s.next() + s.nextLine();
+        System.out.print("Enter description: ");
+        String description = s.next() + s.nextLine();
+        System.out.print("Enter category (e.g., School, Work, Home): ");
+        String category = s.next() + s.nextLine();
+        System.out.print("Enter deadline (yyyy-MM-dd): ");
+        String deadlineStr = s.next() + s.nextLine();
+        try {
+            Date deadline = dateFormat.parse(deadlineStr);
+            manage.addTask(title, description, category, deadline);
+            System.out.println("Task added successfully!");
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please try again.");
+        }
+    }
+
+    public void editTask() {
+
+    }
+
+    public void delTask() {
+
+    }
+
+    public void viewTask() {
+
+    }
+
+    // menu 2: schedule
+    public void schedule() {
+        System.out.println("======= SCHEDULE =======");
+        System.out.println("1. Create schedule");
+        System.out.println("2. Edit schedule");
+        System.out.println("3. Delete schedule");
+        System.out.println("4. View all schedule");
+        System.out.println("0. Back");
+        System.out.print("Choice: ");
+        int choice = errorHandling(0, 4);
+        System.out.println("========================");
+        switch (choice) {
+            case 0:
+                menu();
+                break;
+            case 1:
+                createSchedule();
+                break;
+            case 2:
+                editSchedule();
+                break;
+            case 3:
+                delSchedule();
+                break;
+            case 4:
+                viewSchedule();
+                break;
+        }
+    }
+
+    public void createSchedule() {
+
+    }
+
+    public void editSchedule() {
+
+    }
+
+    public void delSchedule() {
+
+    }
+
+    public void viewSchedule() {
+
+    }
+
+    // menu 3: calendar
+    public void calendar() {
+
     }
 
     // error handling for integer with limit for choice limit
