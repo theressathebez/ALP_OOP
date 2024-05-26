@@ -13,8 +13,6 @@ public class Appflow {
     //user rn
     User currentUser = new User();
     
-    //manage task and schedule
-    Manage manage = new Manage();
 
     // boarding
     public void start() {
@@ -125,10 +123,10 @@ public class Appflow {
     // menu 1: task
     public void task() {
         System.out.println("========= TASK =========");
-        System.out.println("1. Create task");
-        System.out.println("2. Edit task");
-        System.out.println("3. Delete task");
-        System.out.println("4. View all task");
+        System.out.println("1. Create Task");
+        System.out.println("2. Edit Task");
+        System.out.println("3. Delete Task");
+        System.out.println("4. View All Task");
         System.out.println("0. Back");
         System.out.print("Choice: ");
         int choice = errorHandling(0, 4);
@@ -163,7 +161,7 @@ public class Appflow {
         String deadlineStr = s.next() + s.nextLine();
         try {
             Date deadline = dateFormat.parse(deadlineStr);
-            manage.addTask(title, description, category, deadline);
+            currentUser.addTask(title, description, category, deadline);
             System.out.println("Task added successfully!");
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
@@ -171,7 +169,7 @@ public class Appflow {
     }
 
     public void editTask() {
-
+        
     }
 
     public void delTask() {
@@ -185,10 +183,10 @@ public class Appflow {
     // menu 2: schedule
     public void schedule() {
         System.out.println("======= SCHEDULE =======");
-        System.out.println("1. Create schedule");
-        System.out.println("2. Edit schedule");
-        System.out.println("3. Delete schedule");
-        System.out.println("4. View all schedule");
+        System.out.println("1. Create Schedule");
+        System.out.println("2. Edit Schedule");
+        System.out.println("3. Delete Schedule");
+        System.out.println("4. View All Schedule");
         System.out.println("0. Back");
         System.out.print("Choice: ");
         int choice = errorHandling(0, 4);
@@ -213,24 +211,24 @@ public class Appflow {
     }
 
     public void createSchedule() {
-
+        
     }
 
     public void editSchedule() {
-
+        
     }
 
     public void delSchedule() {
-
+        
     }
 
     public void viewSchedule() {
-
+        
     }
 
     // menu 3: calendar
     public void calendar() {
-
+        
     }
 
     // error handling for integer with limit for choice limit
