@@ -10,7 +10,7 @@
 public class Main {
     public static void main(String[] args) {
         Appflow app = new Appflow();
-        
+        System.out.println("Hello there wassup");
         app.start();
     }
 }
