@@ -13,6 +13,8 @@ public class Appflow {
     //user rn
     User currentUser = new User();
     
+    //list category
+    ArrayList<category> categories = new ArrayList<>();
 
     // boarding
     public void start() {
@@ -211,7 +213,21 @@ public class Appflow {
     }
 
     public void createSchedule() {
-        
+        System.out.print("Enter title: ");
+        String title = s.next() + s.nextLine();
+        System.out.print("Enter description: ");
+        String description = s.next() + s.nextLine();
+        System.out.print("Enter category (e.g., School, Work, Home): ");
+        String category = s.next() + s.nextLine();
+        System.out.print("Enter deadline (yyyy-MM-dd): ");
+        String deadlineStr = s.next() + s.nextLine();
+        try {
+            Date deadline = dateFormat.parse(deadlineStr);
+            currentUser.addTask(title, description, category, deadline);
+            System.out.println("Task added successfully!");
+        } catch (ParseException e) {
+            System.out.println("Invalid date format. Please try again.");
+        }
     }
 
     public void editSchedule() {
