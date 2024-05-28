@@ -8,15 +8,15 @@ import java.time.format.DateTimeParseException;
 public class Appflow {
 
     Scanner s = new Scanner(System.in);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-    
+
     // list of all user registered
     ArrayList<User> users = new ArrayList<>();
 
     //user rn
     User currentUser = new User();
-    
+
     //list category
     ArrayList<category> categories = new ArrayList<>();
 
@@ -25,6 +25,12 @@ public class Appflow {
         System.out.println("### STUDY ASSISTANT ###");
         System.out.println("####### WELCOME #######");
         System.out.println(" ");
+
+        // Add default categories
+        categories.add(new category("Work"));
+        categories.add(new category("School"));
+        categories.add(new category("Home"));
+
         loginRegister();
     }
 
@@ -102,7 +108,7 @@ public class Appflow {
             System.out.println("0. Logout");
             System.out.print("Choice: ");
             int choice = errorHandling(0, 3);
-            System.out.println("========================");
+            System.out.println(" ");
             switch (choice) {
                 case 0:
                     loginRegister();
@@ -124,6 +130,14 @@ public class Appflow {
     // dashboard
     public void dashboard() {
 
+        
+//        System.out.println(" ");
+//        System.out.println("== CREATE NEW CATEGORY ==");
+//        System.out.print("Enter category name: ");
+//        String name = s.next() + s.nextLine();
+//        categories.add(new category(name));
+//        System.out.println("========================");
+//        System.out.println(" ");
     }
 
     // menu 1: task
@@ -136,7 +150,7 @@ public class Appflow {
         System.out.println("0. Back");
         System.out.print("Choice: ");
         int choice = errorHandling(0, 4);
-        System.out.println("========================");
+        System.out.println(" ");
         switch (choice) {
             case 0:
                 menu();
@@ -177,7 +191,7 @@ public class Appflow {
     public void editTask() {
         System.out.print("Choice: ");
         int choice = errorHandling(1, currentUser.getTasks().size());
-        
+
     }
 
     public void delTask() {
@@ -191,18 +205,18 @@ public class Appflow {
     public void viewTask() {
         System.out.println("== View All Tasks ==");
         int i = 1;
-        for(Task task : currentUser.getTasks()){
+        for (Task task : currentUser.getTasks()) {
             System.out.println("===================");
             System.out.println("[" + i + "] " + task.getTitle());
             System.out.println("'" + task.getDesc() + "'");
             System.out.println("Categories : \n");
             System.out.println("* " + task.getDeadline());
             System.out.print("Priority: ");
-            if(task.getPriorityStatus() == PriorityStatus.GREEN){
+            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
                 System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-            }else if(task.getPriorityStatus() == PriorityStatus.YELLOW){
+            } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
                 System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-            }else if(task.getPriorityStatus() == PriorityStatus.RED){
+            } else if (task.getPriorityStatus() == PriorityStatus.RED) {
                 System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
             }
             System.out.println("** " + task.getProgressStatus() + " ** \n");
@@ -244,9 +258,14 @@ public class Appflow {
         String title = s.next() + s.nextLine();
         System.out.print("Enter description: ");
         String description = s.next() + s.nextLine();
-        System.out.print("Enter category (e.g., School, Work, Home): ");
-        String category = s.next() + s.nextLine();
-        System.out.print("Enter date (yyyy-MM-dd): ");
+        System.out.println("Select category: ");
+        for (int i = 0; i < categories.size(); i++) {
+            System.out.println((i + 1) + ". " + categories.get(i).getName_cat());
+        }
+        System.out.print("Choose: ");
+        int categoryChoice = errorHandling(0, categories.size());
+        category selectedCategory = categories.get(categoryChoice - 1);
+        System.out.print("Enter date (dd-MM-yyyy): ");
         String date = s.next() + s.nextLine();
         System.out.print("Enter start time (HH:mm): ");
         String start = s.next() + s.nextLine();
@@ -256,30 +275,74 @@ public class Appflow {
             Date dateObj = dateFormat.parse(date);
             LocalTime startTime = LocalTime.parse(start, timeFormatter);
             LocalTime endTime = LocalTime.parse(end, timeFormatter);
-            currentUser.addSchedule(title, description, category, dateObj, startTime, endTime);
+            currentUser.addSchedule(title, description, selectedCategory.getName_cat(), dateObj, startTime, endTime);
             System.out.println("Schedule added successfully!");
+            System.out.println(" ");
+            schedule();
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
+            System.out.println(" ");
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please try again.");
+            System.out.println(" ");
         }
+
     }
 
     public void editSchedule() {
-        
+
     }
 
     public void delSchedule() {
-        
+        int i = 1;
+        for (Schedule schedule : currentUser.getSchedules()) {
+            System.out.println("[" + i + "] " + schedule.getTitle());
+        }
+        System.out.print("Choice: ");
+        int choice = errorHandling(1, currentUser.getTasks().size());
+        System.out.println("Deleting " + currentUser.getTasks().get(choice-1).getTitle());
+        currentUser.getTasks().remove(choice-1);
+        System.out.println("Deleted!");
     }
 
     public void viewSchedule() {
-        
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        System.out.println("== View All Schedules ==");
+        int i = 1;
+        for (Schedule schedule : currentUser.getSchedules()) {
+            String formattedDate = outputDateFormat.format(schedule.getDate());
+            String formattedStartTime = schedule.getStartTime().format(timeFormatter);
+            String formattedEndTime = schedule.getEndTime().format(timeFormatter);
+
+            System.out.println("[" + i + "] " + schedule.getTitle());
+            System.out.println("'" + schedule.getDesc() + "'");
+            System.out.println("Categories: " + schedule.getCategory());
+            System.out.println("Date: " + formattedDate);
+            System.out.println("Time: " + formattedStartTime + " - " + formattedEndTime);
+            System.out.println(" ");
+        }
+
+        System.out.print("Is there any schedule that is finished [Y/N]? ");
+        String a = s.next() + s.nextLine();
+        if (a.equalsIgnoreCase("Y")) {
+            System.out.print("Which schedule is finished? ");
+            int noSch = errorHandling(1, currentUser.getSchedules().size());
+            currentUser.getSchedules().remove(noSch - 1);
+            System.out.println("Schedule completed!");
+        } else if (a.equalsIgnoreCase("N")) {
+            schedule();
+        } else {
+            System.out.println("Please input Y/N!");
+        }
     }
 
     // menu 3: calendar
     public void calendar() {
-        
+
+        System.out.println("========================");
+        System.out.println("========================");
     }
 
     // error handling for integer with limit for choice limit
