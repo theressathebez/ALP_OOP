@@ -26,4 +26,12 @@ public class Task extends Item {
         this.priorityStatus = priorityStatus;
     }
 
+    public ProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public void setProgressStatus(ProgressStatus progressStatus) {
+        this.progressStatus = progressStatus;
+    }
+
 }

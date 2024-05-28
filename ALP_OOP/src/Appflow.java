@@ -171,15 +171,38 @@ public class Appflow {
     }
 
     public void editTask() {
+        System.out.print("Choice: ");
+        int choice = errorHandling(1, currentUser.getTasks().size());
         
     }
 
     public void delTask() {
-
+        System.out.print("Choice: ");
+        int choice = errorHandling(1, currentUser.getTasks().size());
+        System.out.println("Deleting " + currentUser.getTasks().get(choice).getTitle());
+        currentUser.getTasks().remove(choice);
+        System.out.println("Deleted!");
     }
 
     public void viewTask() {
-
+        System.out.println("== View All Tasks ==");
+        int i = 1;
+        for(Task task : currentUser.getTasks()){
+            System.out.println("===================");
+            System.out.println("[" + i + "] " + task.getTitle());
+            System.out.println("'" + task.getDesc() + "'");
+            System.out.println("Categories : \n");
+            System.out.println("* " + task.getDeadline());
+            System.out.print("Priority: ");
+            if(task.getPriorityStatus() == PriorityStatus.GREEN){
+                System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
+            }else if(task.getPriorityStatus() == PriorityStatus.YELLOW){
+                System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
+            }else if(task.getPriorityStatus() == PriorityStatus.RED){
+                System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
+            }
+            System.out.println("** " + task.getProgressStatus() + " ** \n");
+        }
     }
 
     // menu 2: schedule
