@@ -1,11 +1,15 @@
 
 import java.util.*;
 import java.text.*;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Appflow {
 
     Scanner s = new Scanner(System.in);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
     
     // list of all user registered
     ArrayList<User> users = new ArrayList<>();
@@ -242,14 +246,22 @@ public class Appflow {
         String description = s.next() + s.nextLine();
         System.out.print("Enter category (e.g., School, Work, Home): ");
         String category = s.next() + s.nextLine();
-        System.out.print("Enter deadline (yyyy-MM-dd): ");
-        String deadlineStr = s.next() + s.nextLine();
+        System.out.print("Enter date (yyyy-MM-dd): ");
+        String date = s.next() + s.nextLine();
+        System.out.print("Enter start time (HH:mm): ");
+        String start = s.next() + s.nextLine();
+        System.out.print("Enter end time (HH:mm): ");
+        String end = s.next() + s.nextLine();
         try {
-            Date deadline = dateFormat.parse(deadlineStr);
-            currentUser.addTask(title, description, category, deadline);
-            System.out.println("Task added successfully!");
+            Date dateObj = dateFormat.parse(date);
+            LocalTime startTime = LocalTime.parse(start, timeFormatter);
+            LocalTime endTime = LocalTime.parse(end, timeFormatter);
+            currentUser.addSchedule(title, description, category, dateObj, startTime, endTime);
+            System.out.println("Schedule added successfully!");
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid time format. Please try again.");
         }
     }
 
