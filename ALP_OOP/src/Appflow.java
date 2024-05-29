@@ -17,8 +17,8 @@ public class Appflow {
     //user rn
     User currentUser = new User();
 
-    //list category
-    ArrayList<category> categories = new ArrayList<>();
+    //list Category
+    ArrayList<Category> categories = new ArrayList<>();
 
     // boarding
     public void start() {
@@ -27,9 +27,9 @@ public class Appflow {
         System.out.println(" ");
 
         // Add default categories
-        categories.add(new category("Work"));
-        categories.add(new category("School"));
-        categories.add(new category("Home"));
+        categories.add(new Category("Work"));
+        categories.add(new Category("School"));
+        categories.add(new Category("Home"));
 
         loginRegister();
     }
@@ -133,9 +133,9 @@ public class Appflow {
         
 //        System.out.println(" ");
 //        System.out.println("== CREATE NEW CATEGORY ==");
-//        System.out.print("Enter category name: ");
+//        System.out.print("Enter Category name: ");
 //        String name = s.next() + s.nextLine();
-//        categories.add(new category(name));
+//        categories.add(new Category(name));
 //        System.out.println("========================");
 //        System.out.println(" ");
     }
@@ -264,7 +264,7 @@ public class Appflow {
         }
         System.out.print("Choose: ");
         int categoryChoice = errorHandling(0, categories.size());
-        category selectedCategory = categories.get(categoryChoice - 1);
+        Category selectedCategory = categories.get(categoryChoice - 1);
         System.out.print("Enter date (dd-MM-yyyy): ");
         String date = s.next() + s.nextLine();
         System.out.print("Enter start time (HH:mm): ");
