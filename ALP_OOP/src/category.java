@@ -3,20 +3,20 @@ import java.util.ArrayList;
 
 
 public class Category {
-    private String name_cat;
+    private String name;
     private ArrayList<Schedule> listSchedule = new ArrayList<>();
     private ArrayList<Task> listTask = new ArrayList<>();
 
     public Category(String name_cat) {
-        this.name_cat = name_cat;
+        this.name = name_cat;
     }
 
-    public String getName_cat() {
-        return name_cat;
+    public String getName() {
+        return name;
     }
 
     public void setName_cat(String name_cat) {
-        this.name_cat = name_cat;
+        this.name = name_cat;
     }
 
     public ArrayList<Schedule> getListSchedule() {

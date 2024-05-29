@@ -260,7 +260,7 @@ public class Appflow {
         String description = s.next() + s.nextLine();
         System.out.println("Select category: ");
         for (int i = 0; i < categories.size(); i++) {
-            System.out.println((i + 1) + ". " + categories.get(i).getName_cat());
+            System.out.println((i + 1) + ". " + categories.get(i).getName());
         }
         System.out.print("Choose: ");
         int categoryChoice = errorHandling(0, categories.size());
@@ -275,7 +275,7 @@ public class Appflow {
             Date dateObj = dateFormat.parse(date);
             LocalTime startTime = LocalTime.parse(start, timeFormatter);
             LocalTime endTime = LocalTime.parse(end, timeFormatter);
-            currentUser.addSchedule(title, description, selectedCategory.getName_cat(), dateObj, startTime, endTime);
+            currentUser.addSchedule(title, description, selectedCategory.getName(), dateObj, startTime, endTime);
             System.out.println("Schedule added successfully!");
             System.out.println(" ");
             schedule();
