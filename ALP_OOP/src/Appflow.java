@@ -174,13 +174,18 @@ public class Appflow {
         String title = s.next() + s.nextLine();
         System.out.print("Enter description: ");
         String description = s.next() + s.nextLine();
-        System.out.print("Enter category (e.g., School, Work, Home): ");
-        String category = s.next() + s.nextLine();
-        System.out.print("Enter deadline (dd-MM-yy): ");
+        System.out.println("Select category: ");
+        for (int i = 0; i < categories.size(); i++) {
+            System.out.println((i + 1) + ". " + categories.get(i).getName());
+        }
+        System.out.print("Choose: ");
+        int categoryChoice = errorHandling(0, categories.size());
+        Category selectedCategory = categories.get(categoryChoice - 1);
+        System.out.print("Enter date (dd-MM-yyyy): ");
         String deadlineStr = s.next() + s.nextLine();
         try {
             Date deadline = dateFormat.parse(deadlineStr);
-            currentUser.addTask(title, description, category, deadline);
+            currentUser.addTask(title, description, selectedCategory.getName(), deadline);
             System.out.println("Task added successfully!");
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
@@ -363,6 +368,9 @@ public class Appflow {
             if (item instanceof Task) {
                 Task taskItem = (Task)item;
                 System.out.println((i + 1) + ". " + taskItem.getTitle());
+            } else if(item instanceof Schedule){
+                Schedule scheduleItem = (Schedule)item;
+                System.out.println((i+1) + ". " + scheduleItem.getTitle());
             }
         }
 //            System.out.println((i + 1) + ". " + );
