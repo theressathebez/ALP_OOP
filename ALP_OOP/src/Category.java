@@ -1,7 +1,8 @@
+
 import java.util.ArrayList;
 
-
 public class Category {
+
     private String name;
     private ArrayList<Schedule> listSchedule = new ArrayList<>();
     private ArrayList<Task> listTask = new ArrayList<>();
@@ -33,5 +34,5 @@ public class Category {
     public void setListTask(ArrayList<Task> listTask) {
         this.listTask = listTask;
     }
-    
+
 }

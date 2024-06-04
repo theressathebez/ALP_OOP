@@ -12,7 +12,7 @@ public class User {
 
     //list of schedule
     private ArrayList<Schedule> schedules = new ArrayList<>();
-    
+
     public User() {
         this.Name = " ";
         this.Username = " ";
@@ -74,29 +74,29 @@ public class User {
     // fdisplays tasks but paged
     public void displayTasksPage(int pageNumber) {
 
-            int tasksPerPage = 4; //change this to change how much is displayed per page
-            int startIndex = (pageNumber - 1) * tasksPerPage;
-            int endIndex = startIndex + tasksPerPage;
+        int tasksPerPage = 4; //change this to change how much is displayed per page
+        int startIndex = (pageNumber - 1) * tasksPerPage;
+        int endIndex = startIndex + tasksPerPage;
 
-            for (int i = startIndex; i < endIndex; i++) {
-                //display task based on i
-                System.out.println("0. Create task");
-                System.out.println("===================");
-                Task task = this.getTasks().get(i);
-                System.out.println("[" + i+1 + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDeadline());
-                System.out.print("Priority: ");
-                if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                    System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                    System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.RED) {
-                    System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
-                }
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
+        for (int i = startIndex; i < endIndex; i++) {
+            //display task based on i
+            System.out.println("0. Create task");
+            System.out.println("===================");
+            Task task = this.getTasks().get(i);
+            System.out.println("[" + i + 1 + "] " + task.getTitle());
+            System.out.println("'" + task.getDesc() + "'");
+            System.out.println("Categories : \n");
+            System.out.println("* " + task.getDeadline());
+            System.out.print("Priority: ");
+            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
+                System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
+            } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
+                System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
+            } else if (task.getPriorityStatus() == PriorityStatus.RED) {
+                System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
             }
+            System.out.println("** " + task.getProgressStatus() + " ** \n");
+        }
         while (true) {
             System.out.print("[N]ext page\n[P]rev page\n[Q]uit\nInput: ");
             String input = s.next() + s.nextLine();
@@ -125,8 +125,8 @@ public class User {
                 System.out.println("Incorrect !");
             } else {
 //                insert task selection thing
-                int inputNumber = Integer.parseInt(input)-1;
-                if(inputNumber == -1){
+                int inputNumber = Integer.parseInt(input) - 1;
+                if (inputNumber == -1) {
                     // create new task
                 }
                 return;
