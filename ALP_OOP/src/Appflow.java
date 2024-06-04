@@ -284,7 +284,7 @@ public class Appflow {
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please try again.");
             System.out.println(" ");
-        
+
         }
     }
 
@@ -360,10 +360,14 @@ public class Appflow {
         //page
         for (int i = startIndex; i < endIndex && i < items.size(); i++) {
             Item item = items.get(i);
-            System.out.println((i + 1) + ". " + item);
+            if (item instanceof Task) {
+                Task taskItem = (Task)item;
+                System.out.println((i + 1) + ". " + taskItem.getTitle());
+            }
         }
-        System.out.println("========================");
-
+//            System.out.println((i + 1) + ". " + );
+        System.out.println(
+                "========================");
     }
 
     public void displayTasksPage(int pageNumber) {
