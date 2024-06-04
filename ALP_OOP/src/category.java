@@ -2,12 +2,12 @@
 import java.util.ArrayList;
 
 
-public class Category {
+public class category {
     private String name;
     private ArrayList<Schedule> listSchedule = new ArrayList<>();
     private ArrayList<Task> listTask = new ArrayList<>();
 
-    public Category(String name_cat) {
+    public category(String name_cat) {
         this.name = name_cat;
     }
 
