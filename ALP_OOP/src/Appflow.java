@@ -219,6 +219,8 @@ public class Appflow {
                 System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
             }
             System.out.println("* " + task.getProgressStatus() + " * \n");
+            
+            i++;
         }
     }
 
@@ -321,6 +323,7 @@ public class Appflow {
             System.out.println("Date: " + formattedDate);
             System.out.println("Time: " + formattedStartTime + " - " + formattedEndTime);
             System.out.println(" ");
+            i++;
         }
 
         System.out.print("Is there any schedule that is finished [Y/N]? ");
@@ -365,7 +368,7 @@ public class Appflow {
                 System.out.println((i + 1) + ". " + taskItem.getTitle());
             }
         }
-//            System.out.println((i + 1) + ". " + );
+        
         System.out.println(
                 "========================");
     }
