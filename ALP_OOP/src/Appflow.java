@@ -298,9 +298,9 @@ public class Appflow {
             System.out.println("[" + i + "] " + schedule.getTitle());
         }
         System.out.print("Choice: ");
-        int choice = errorHandling(1, currentUser.getTasks().size());
-        System.out.println("Deleting " + currentUser.getTasks().get(choice-1).getTitle());
-        currentUser.getTasks().remove(choice-1);
+        int choice = errorHandling(1, currentUser.getSchedules().size());
+        System.out.println("Deleting " + currentUser.getSchedules().get(choice-1).getTitle());
+        currentUser.getSchedules().remove(choice-1);
         System.out.println("Deleted!");
     }
 
