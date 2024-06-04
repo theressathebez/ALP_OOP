@@ -1,9 +1,7 @@
-
 import java.util.ArrayList;
 
 
-public class Category{
-
+public class Category {
     private String name;
     private ArrayList<Schedule> listSchedule = new ArrayList<>();
     private ArrayList<Task> listTask = new ArrayList<>();

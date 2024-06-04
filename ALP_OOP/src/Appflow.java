@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.text.*;
 import java.time.LocalTime;
@@ -14,10 +13,10 @@ public class Appflow {
     // list of all user registered
     ArrayList<User> users = new ArrayList<>();
 
-    // user rn
+    //user rn
     User currentUser = new User();
 
-    // list Category
+    //list Category
     ArrayList<Category> categories = new ArrayList<>();
 
     // boarding
@@ -120,7 +119,7 @@ public class Appflow {
                     schedule();
                     break;
                 case 3:
-                    calendar(1);
+                    calendar();
                     break;
             }
         }
@@ -130,13 +129,14 @@ public class Appflow {
     // dashboard
     public void dashboard() {
 
-        // System.out.println(" ");
-        // System.out.println("== CREATE NEW CATEGORY ==");
-        // System.out.print("Enter Category name: ");
-        // String name = s.next() + s.nextLine();
-        // categories.add(new Category(name));
-        // System.out.println("========================");
-        // System.out.println(" ");
+        
+//        System.out.println(" ");
+//        System.out.println("== CREATE NEW CATEGORY ==");
+//        System.out.print("Enter Category name: ");
+//        String name = s.next() + s.nextLine();
+//        categories.add(new Category(name));
+//        System.out.println("========================");
+//        System.out.println(" ");
     }
 
     // menu 1: task
@@ -176,7 +176,7 @@ public class Appflow {
         String description = s.next() + s.nextLine();
         System.out.print("Enter category (e.g., School, Work, Home): ");
         String category = s.next() + s.nextLine();
-        System.out.print("Enter deadline (dd-MM-yy): ");
+        System.out.print("Enter deadline (yyyy-MM-dd): ");
         String deadlineStr = s.next() + s.nextLine();
         try {
             Date deadline = dateFormat.parse(deadlineStr);
@@ -209,7 +209,7 @@ public class Appflow {
             System.out.println("[" + i + "] " + task.getTitle());
             System.out.println("'" + task.getDesc() + "'");
             System.out.println("Categories : \n");
-            System.out.println("* " + task.getDate());
+            System.out.println("* " + task.getDeadline());
             System.out.print("Priority: ");
             if (task.getPriorityStatus() == PriorityStatus.GREEN) {
                 System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
@@ -284,8 +284,8 @@ public class Appflow {
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please try again.");
             System.out.println(" ");
-
         }
+
     }
 
     public void editSchedule() {
@@ -298,11 +298,9 @@ public class Appflow {
             System.out.println("[" + i + "] " + schedule.getTitle());
         }
         System.out.print("Choice: ");
-
         int choice = errorHandling(1, currentUser.getTasks().size());
-        System.out.println("Deleting " + currentUser.getTasks().get(choice - 1).getTitle());
-        currentUser.getTasks().remove(choice - 1);
-
+        System.out.println("Deleting " + currentUser.getTasks().get(choice-1).getTitle());
+        currentUser.getTasks().remove(choice-1);
         System.out.println("Deleted!");
     }
 
@@ -340,130 +338,10 @@ public class Appflow {
     }
 
     // menu 3: calendar
-    public void calendar(int pageNumber) {
-        System.out.println("0. Back to Menu");
+    public void calendar() {
+
         System.out.println("========================");
-        int itemsPerPage = 7; //how many items displayed per page
-        int startIndex = (pageNumber - 1) * itemsPerPage;
-        int endIndex = startIndex + itemsPerPage;
-
-        List<Item> items = new ArrayList<>();
-        items.addAll(currentUser.getTasks());
-        items.addAll(currentUser.getSchedules());
-
-        //sort using collection sort
-        Collections.sort(items, new Comparator<Item>() {
-            @Override
-            public int compare(Item one, Item two) {
-                return one.getDate().compareTo(two.getDate());
-            }
-        });
-
-        //page
-        for (int i = startIndex; i < endIndex && i < items.size(); i++) {
-            Item item = items.get(i);
-            if (item instanceof Task) {
-                Task taskItem = (Task)item;
-                System.out.println((i + 1) + ". " + taskItem.getTitle());
-
-            System.out.println((i+1) + ". " + item);
-        }
         System.out.println("========================");
-        
-        }
-    
-        public void displayTasksPage(int pageNumber) {
-
-            int tasksPerPage = 4; //change this to change how much is displayed per page
-            int startIndex = (pageNumber - 1) * tasksPerPage;
-            int endIndex = startIndex + tasksPerPage;
-
-            for (int i = startIndex; i < endIndex; i++) {
-                //display task based on i
-                System.out.println("0. Create task");
-                System.out.println("===================");
-                Task task = currentUser.getTasks().get(i);
-                System.out.println("[" + i+1 + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDeadline());
-                System.out.print("Priority: ");
-                if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                    System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                    System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.RED) {
-                    System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
-                }
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-
-            }
-        }
-//            System.out.println((i + 1) + ". " + );
-        System.out.println(
-                "========================");
-    }
-
-    public void displayTasksPage(int pageNumber) {
-
-        int tasksPerPage = 4; // change this to change how much is displayed per page
-        int startIndex = (pageNumber - 1) * tasksPerPage;
-        int endIndex = startIndex + tasksPerPage;
-
-        for (int i = startIndex; i < endIndex; i++) {
-            // display task based on i
-            System.out.println("0. Create task");
-            System.out.println("===================");
-            Task task = this.getTasks().get(i);
-            System.out.println("[" + i + 1 + "] " + task.getTitle());
-            System.out.println("'" + task.getDesc() + "'");
-            System.out.println("Categories : \n");
-            System.out.println("* " + task.getDeadline());
-            System.out.print("Priority: ");
-            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-            } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-            } else if (task.getPriorityStatus() == PriorityStatus.RED) {
-                System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
-            }
-            System.out.println("** " + task.getProgressStatus() + " ** \n");
-        }
-        while (true) {
-            System.out.print("[N]ext page\n[P]rev page\n[Q]uit\nInput: ");
-            String input = s.next() + s.nextLine();
-
-            // scan for next action
-            // can click 'q' to exit, or anything really
-            // this regex checks if input is integer, if not then no
-            if (input.equalsIgnoreCase("q")) {
-                return;
-            }
-
-            if (input.equalsIgnoreCase("p")) {
-                // prev page
-                if (pageNumber != 1) {
-                    displayTasksPage(pageNumber - 1);
-                    return;
-                } else {
-                    System.out.println("Cannot go to page < 1");
-                }
-            } else if (input.equalsIgnoreCase("n")) {
-                // choose nextPage
-                displayTasksPage(pageNumber + 1);
-                return;
-            } else if (!input.matches("^[0-9]+$")) {
-                // not an integer or any o them
-                System.out.println("Incorrect !");
-            } else {
-                // insert task selection thing
-                int inputNumber = Integer.parseInt(input) - 1;
-                if (inputNumber == -1) {
-                    // create new task
-                }
-                return;
-            }
-        }
     }
 
     // error handling for integer with limit for choice limit
@@ -483,3 +361,5 @@ public class Appflow {
         return num;
     }
 }
+
+
