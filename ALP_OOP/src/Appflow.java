@@ -18,7 +18,7 @@ public class Appflow {
     User currentUser = new User();
 
     //list Category
-    ArrayList<category> categories = new ArrayList<>();
+    ArrayList<Category> categories = new ArrayList<>();
 
     // boarding
     public void start() {
@@ -27,9 +27,9 @@ public class Appflow {
         System.out.println(" ");
 
         // Add default categories
-        categories.add(new category("Work"));
-        categories.add(new category("School"));
-        categories.add(new category("Home"));
+        categories.add(new Category("Work"));
+        categories.add(new Category("School"));
+        categories.add(new Category("Home"));
 
         loginRegister();
     }
@@ -130,7 +130,6 @@ public class Appflow {
     // dashboard
     public void dashboard() {
 
-        
 //        System.out.println(" ");
 //        System.out.println("== CREATE NEW CATEGORY ==");
 //        System.out.print("Enter Category name: ");
@@ -264,7 +263,7 @@ public class Appflow {
         }
         System.out.print("Choose: ");
         int categoryChoice = errorHandling(0, categories.size());
-        category selectedCategory = categories.get(categoryChoice - 1);
+        Category selectedCategory = categories.get(categoryChoice - 1);
         System.out.print("Enter date (dd-MM-yyyy): ");
         String date = s.next() + s.nextLine();
         System.out.print("Enter start time (HH:mm): ");
@@ -285,8 +284,8 @@ public class Appflow {
         } catch (DateTimeParseException e) {
             System.out.println("Invalid time format. Please try again.");
             System.out.println(" ");
+        
         }
-
     }
 
     public void editSchedule() {
@@ -300,8 +299,8 @@ public class Appflow {
         }
         System.out.print("Choice: ");
         int choice = errorHandling(1, currentUser.getTasks().size());
-        System.out.println("Deleting " + currentUser.getTasks().get(choice-1).getTitle());
-        currentUser.getTasks().remove(choice-1);
+        System.out.println("Deleting " + currentUser.getTasks().get(choice - 1).getTitle());
+        currentUser.getTasks().remove(choice - 1);
         System.out.println("Deleted!");
     }
 
@@ -345,53 +344,53 @@ public class Appflow {
         int itemsPerPage = 7; //how many items displayed per page
         int startIndex = (pageNumber - 1) * itemsPerPage;
         int endIndex = startIndex + itemsPerPage;
-        
+
         List<Item> items = new ArrayList<>();
         items.addAll(currentUser.getTasks());
         items.addAll(currentUser.getSchedules());
-        
+
         //sort using collection sort
-        Collections.sort(items, new Comparator<Item>(){
+        Collections.sort(items, new Comparator<Item>() {
             @Override
-            public int compare(Item one,Item two){
+            public int compare(Item one, Item two) {
                 return one.getDate().compareTo(two.getDate());
             }
         });
-        
+
         //page
-        for(int i = startIndex; i<endIndex &&i<items.size(); i++){
+        for (int i = startIndex; i < endIndex && i < items.size(); i++) {
             Item item = items.get(i);
-            System.out.println((i+1) + ". " + item);
+            System.out.println((i + 1) + ". " + item);
         }
         System.out.println("========================");
-        
+
     }
-    
-        public void displayTasksPage(int pageNumber) {
 
-            int tasksPerPage = 4; //change this to change how much is displayed per page
-            int startIndex = (pageNumber - 1) * tasksPerPage;
-            int endIndex = startIndex + tasksPerPage;
+    public void displayTasksPage(int pageNumber) {
 
-            for (int i = startIndex; i < endIndex; i++) {
-                //display task based on i
-                System.out.println("0. Create task");
-                System.out.println("===================");
-                Task task = this.getTasks().get(i);
-                System.out.println("[" + i+1 + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDeadline());
-                System.out.print("Priority: ");
-                if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                    System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                    System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-                } else if (task.getPriorityStatus() == PriorityStatus.RED) {
-                    System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
-                }
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
+        int tasksPerPage = 4; //change this to change how much is displayed per page
+        int startIndex = (pageNumber - 1) * tasksPerPage;
+        int endIndex = startIndex + tasksPerPage;
+
+        for (int i = startIndex; i < endIndex; i++) {
+            //display task based on i
+            System.out.println("0. Create task");
+            System.out.println("===================");
+            Task task = this.getTasks().get(i);
+            System.out.println("[" + i + 1 + "] " + task.getTitle());
+            System.out.println("'" + task.getDesc() + "'");
+            System.out.println("Categories : \n");
+            System.out.println("* " + task.getDeadline());
+            System.out.print("Priority: ");
+            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
+                System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
+            } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
+                System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
+            } else if (task.getPriorityStatus() == PriorityStatus.RED) {
+                System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
             }
+            System.out.println("** " + task.getProgressStatus() + " ** \n");
+        }
         while (true) {
             System.out.print("[N]ext page\n[P]rev page\n[Q]uit\nInput: ");
             String input = s.next() + s.nextLine();
@@ -420,8 +419,8 @@ public class Appflow {
                 System.out.println("Incorrect !");
             } else {
 //                insert task selection thing
-                int inputNumber = Integer.parseInt(input)-1;
-                if(inputNumber == -1){
+                int inputNumber = Integer.parseInt(input) - 1;
+                if (inputNumber == -1) {
                     // create new task
                 }
                 return;
