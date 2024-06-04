@@ -12,7 +12,7 @@ public class User {
 
     //list of schedule
     private ArrayList<Schedule> schedules = new ArrayList<>();
-
+    
     public User() {
         this.Name = " ";
         this.Username = " ";

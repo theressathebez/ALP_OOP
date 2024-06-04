@@ -7,15 +7,20 @@ public class Task extends Item {
     private PriorityStatus priorityStatus;
     private ProgressStatus progressStatus;
 
-    public Task(String title, String desc, String category, Date deadline) {
-        super(title, desc, category);
-        this.deadline = deadline;
+    public Task(String title, String desc, String category, Date date) {
+        super(title, desc, category, date);
+        this.deadline = date;
         this.priorityStatus = PriorityStatus.GREEN;
         this.progressStatus = ProgressStatus.NOT_STARTED;
     }
 
-    public Date getDeadline() {
+
+   public Date getDeadline() {
         return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 
     public PriorityStatus getPriorityStatus() {
@@ -33,6 +38,4 @@ public class Task extends Item {
     public void setProgressStatus(ProgressStatus progressStatus) {
         this.progressStatus = progressStatus;
     }
-
-
 }

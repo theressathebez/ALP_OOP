@@ -8,10 +8,9 @@ public class Schedule extends Item {
     private Date date;
 
     public Schedule(String title, String desc, String category,Date date, LocalTime startTime, LocalTime endTime) {
-        super(title, desc, category);
+        super(title, desc, category, date);
         this.startTime = startTime;
         this.endTime = endTime;
-        this.date = date;
     }
 
     public LocalTime getStartTime() {
@@ -38,4 +37,5 @@ public class Schedule extends Item {
         this.date = date;
     }
 
+    
 }
