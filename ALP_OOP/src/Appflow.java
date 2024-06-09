@@ -140,20 +140,6 @@ public class Appflow {
     public void menu() {
         while (true) {
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
-                for (Task task : currentUser.getTasks()) {
-                    writer.write(task.getTitle() + "\n");
-                    writer.write(task.getDesc() + "\n");
-                    writer.write(task.getCategory() + "\n");
-                    writer.write(task.getDeadline() + "\n");
-                    writer.write(task.getPriorityStatus() + "\n");
-                    writer.write(task.getProgressStatus() + "\n");
-                }
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
                 BufferedReader reader = new BufferedReader(new FileReader(currentUser.getUsername() + "Tasks.txt"));
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -193,6 +179,7 @@ public class Appflow {
             } catch (IOException ex) {
                 Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
             }
+
             System.out.println("== MY STUDY ASSISTANT ==");
             dashboard();
             System.out.println(" ");
@@ -301,13 +288,26 @@ public class Appflow {
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
         }
-
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
+            for (Task task : currentUser.getTasks()) {
+                writer.write(task.getTitle() + "\n");
+                writer.write(task.getDesc() + "\n");
+                writer.write(task.getCategory() + "\n");
+                writer.write(task.getDeadline() + "\n");
+                writer.write(task.getPriorityStatus() + "\n");
+                writer.write(task.getProgressStatus() + "\n");
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void editTask() {
         displayTask();
         System.out.print("0. Back\nChoice: ");
-        int choice = errorHandling(1, currentUser.getTasks().size());
+        int choice = errorHandling(0, currentUser.getTasks().size());
         if (choice != 0) {
             choice--;
             Task chosen = currentUser.getTasks().get(choice);
@@ -399,6 +399,21 @@ public class Appflow {
                     }
                     System.out.println("Successfully Changed Progress Status!");
                     break;
+            }
+
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
+                for (Task task : currentUser.getTasks()) {
+                    writer.write(task.getTitle() + "\n");
+                    writer.write(task.getDesc() + "\n");
+                    writer.write(task.getCategory() + "\n");
+                    writer.write(task.getDeadline() + "\n");
+                    writer.write(task.getPriorityStatus() + "\n");
+                    writer.write(task.getProgressStatus() + "\n");
+                }
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             return;
@@ -699,6 +714,10 @@ public class Appflow {
             } else if (item instanceof Schedule) {
                 Schedule scheduleItem = (Schedule) item;
                 System.out.println((i + 1) + ". " + scheduleItem.getTitle());
+                System.out.println("Date: " + scheduleItem.getDate());
+                System.out.println("Start Time: " + scheduleItem.getStartTime());
+                System.out.println("End Time: " + scheduleItem.getEndTime());
+                System.out.println("Category: " + scheduleItem.getCategory());
             }
         }
         while (true) {
