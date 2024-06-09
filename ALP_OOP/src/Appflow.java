@@ -139,6 +139,60 @@ public class Appflow {
     // menu after logging in
     public void menu() {
         while (true) {
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
+                for (Task task : currentUser.getTasks()) {
+                    writer.write(task.getTitle() + "\n");
+                    writer.write(task.getDesc() + "\n");
+                    writer.write(task.getCategory() + "\n");
+                    writer.write(task.getDeadline() + "\n");
+                    writer.write(task.getPriorityStatus() + "\n");
+                    writer.write(task.getProgressStatus() + "\n");
+                }
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(currentUser.getUsername() + "Tasks.txt"));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String title = line;
+                    String desc = reader.readLine();
+                    String category = reader.readLine();
+                    String dateStr = reader.readLine();
+                    Date date = null;
+                    try {
+                        date = dateFormat.parse(dateStr);
+                    } catch (ParseException e) {
+                        Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, "Invalid date format in file", e);
+                        continue;
+                    }
+                    Task newTask = new Task(title, desc, category, date);
+                    String priority = reader.readLine();
+                    if (priority.equalsIgnoreCase("GREEN")) {
+                        newTask.setPriorityStatus(PriorityStatus.GREEN);
+                    } else if (priority.equalsIgnoreCase("YELLOW")) {
+                        newTask.setPriorityStatus(PriorityStatus.YELLOW);
+                    } else if (priority.equalsIgnoreCase("RED")) {
+                        newTask.setPriorityStatus(PriorityStatus.RED);
+                    }
+                    String progress = reader.readLine();
+                    if (progress.equalsIgnoreCase("NOT_STARTED")) {
+                        newTask.setProgressStatus(ProgressStatus.NOT_STARTED);
+                    } else if (progress.equalsIgnoreCase("IN_PROGRESS")) {
+                        newTask.setProgressStatus(ProgressStatus.IN_PROGRESS);
+                    } else if (progress.equalsIgnoreCase("DONE")) {
+                        newTask.setProgressStatus(ProgressStatus.DONE);
+                    }
+                    currentUser.getTasks().add(newTask);
+                }
+                reader.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+            }
             System.out.println("== MY STUDY ASSISTANT ==");
             dashboard();
             System.out.println(" ");
