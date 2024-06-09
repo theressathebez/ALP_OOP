@@ -211,7 +211,17 @@ public class Appflow {
                 delTask();
                 break;
             case 4:
-                viewTask();
+                System.out.println("1. Sort by Date");
+                System.out.println("2. Sort by Priority Status");
+                System.out.println("3. Sort by Progress Status");
+                int input = errorHandling(1, 3);
+                if (input == 1) {
+                    displayTask();
+                } else if (input == 2) {
+                    displayTaskbyPriority();
+                } else if (input == 3) {
+                    displayTaskbyProgress();
+                }
                 break;
         }
     }
@@ -237,7 +247,7 @@ public class Appflow {
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
         }
-        
+
     }
 
     public void editTask() {
@@ -325,12 +335,12 @@ public class Appflow {
                     System.out.println("2. In Progress");
                     System.out.println("3. Done");
                     System.out.print("Input: ");
-                    int inputProgress = errorHandling(1,3);
-                    if(inputProgress == 1){
+                    int inputProgress = errorHandling(1, 3);
+                    if (inputProgress == 1) {
                         chosen.setProgressStatus(ProgressStatus.NOT_STARTED);
-                    }else if(inputProgress == 2){
+                    } else if (inputProgress == 2) {
                         chosen.setProgressStatus(ProgressStatus.IN_PROGRESS);
-                    }else{
+                    } else {
                         chosen.setProgressStatus(ProgressStatus.DONE);
                     }
                     System.out.println("Successfully Changed Progress Status!");
@@ -385,6 +395,94 @@ public class Appflow {
             System.out.print("Priority: ");
             getPriorityStatusColour(task);
             System.out.println("** " + task.getProgressStatus() + " ** \n");
+        }
+    }
+
+    public void displayTaskbyPriority() {
+        System.out.println("== All Tasks by Priority ==");
+        int i = 1;
+        System.out.println("== \u001B[31m RED \u001B[0m ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getPriorityStatus() == PriorityStatus.RED) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+        System.out.println("== \u001B[33m YELLOW \u001B[0m ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+        System.out.println("== \u001B[32m GREEN \u001B[0m ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+    }
+
+    public void displayTaskbyProgress() {
+        System.out.println("== All Tasks by Progress ==");
+        int i = 1;
+        System.out.println("== NOT STARTED ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getProgressStatus() == ProgressStatus.NOT_STARTED) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+        System.out.println("== IN PROGRESS ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+        System.out.println("== DONE ==");
+        for (Task task : currentUser.getTasks()) {
+            if (task.getProgressStatus() == ProgressStatus.DONE) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
         }
     }
 
@@ -579,75 +677,12 @@ public class Appflow {
 //                insert task selection thing
                 int inputNumber = Integer.parseInt(input) - 1;
                 if (inputNumber == -1) {
-                    // back
-
-                }
-                return;
-            }
-        }
-
-    }
-
-    public void displayTasksPage(int pageNumber) {
-
-        int tasksPerPage = 4; //change this to change how much is displayed per page
-        int startIndex = (pageNumber - 1) * tasksPerPage;
-        int endIndex = startIndex + tasksPerPage;
-
-        for (int i = startIndex; i < endIndex; i++) {
-            //display task based on i
-            System.out.println("0. Create task");
-            System.out.println("===================");
-            Task task = this.getTasks().get(i);
-            System.out.println("[" + i + 1 + "] " + task.getTitle());
-            System.out.println("'" + task.getDesc() + "'");
-            System.out.println("Categories : \n");
-            System.out.println("* " + task.getDeadline());
-            System.out.print("Priority: ");
-            if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                System.out.println("\u001B[32m" + task.getPriorityStatus() + "\u001B[0m");
-            } else if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
-            } else if (task.getPriorityStatus() == PriorityStatus.RED) {
-                System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
-            }
-            System.out.println("** " + task.getProgressStatus() + " ** \n");
-        }
-        while (true) {
-            System.out.print("[N]ext page\n[P]rev page\n[Q]uit\nInput: ");
-            String input = s.next() + s.nextLine();
-
-            //scan for next action
-            //can click 'q' to exit, or anything really
-            // this regex checks if input is integer, if not then no
-            if (input.equalsIgnoreCase("q")) {
-                return;
-            }
-
-            if (input.equalsIgnoreCase("p")) {
-                // prev page
-                if (pageNumber != 1) {
-                    displayTasksPage(pageNumber - 1);
                     return;
-                } else {
-                    System.out.println("Cannot go to page < 1");
-                }
-            } else if (input.equalsIgnoreCase("n")) {
-                // choose nextPage
-                displayTasksPage(pageNumber + 1);
-                return;
-            } else if (!input.matches("^[0-9]+$")) {
-//            not an integer or any o them
-                System.out.println("Incorrect !");
-            } else {
-//                insert task selection thing
-                int inputNumber = Integer.parseInt(input) - 1;
-                if (inputNumber == -1) {
-                    // create new task
                 }
                 return;
             }
         }
+
     }
 
     // error handling for integer with limit for choice limit
