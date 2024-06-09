@@ -540,6 +540,10 @@ public class Appflow {
             if (item instanceof Task) {
                 Task taskItem = (Task) item;
                 System.out.println((i + 1) + ". " + taskItem.getTitle());
+                System.out.println("Deadline: " + taskItem.getDeadline());
+                System.out.println("Category: " + taskItem.getCategory());
+                System.out.println("Priority: " + taskItem.getPriorityStatus());
+                System.out.println("Progress: " + taskItem.getProgressStatus());
             } else if (item instanceof Schedule) {
                 Schedule scheduleItem = (Schedule) item;
                 System.out.println((i + 1) + ". " + scheduleItem.getTitle());
