@@ -175,11 +175,12 @@ public class Appflow {
                 }
                 reader.close();
             } catch (FileNotFoundException ex) {
-                System.out.println("File not inserted");;
+
             } catch (IOException ex) {
                 Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            System.out.println(" ");
             System.out.println("== MY STUDY ASSISTANT ==");
             dashboard();
             System.out.println(" ");
@@ -434,7 +435,7 @@ public class Appflow {
         int i = 1;
         for (Task task : currentUser.getTasks()) {
             System.out.println("===================");
-            if(currentUser.getTasks().isEmpty()){
+            if (currentUser.getTasks().isEmpty()) {
                 System.out.println("No Tasks!");
                 return;
             }
@@ -451,7 +452,7 @@ public class Appflow {
 
     public void displayTaskbyPriority() {
         System.out.println("== All Tasks by Priority ==");
-        if(currentUser.getTasks().isEmpty()){
+        if (currentUser.getTasks().isEmpty()) {
             System.out.println("No Tasks!");
             return;
         }
@@ -499,7 +500,7 @@ public class Appflow {
 
     public void displayTaskbyProgress() {
         System.out.println("== All Tasks by Progress ==");
-        if(currentUser.getTasks().isEmpty()){
+        if (currentUser.getTasks().isEmpty()) {
             System.out.println("No Tasks!");
             return;
         }
@@ -554,8 +555,8 @@ public class Appflow {
             System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
         }
     }
-    
-    public void overwriteTasktxtFile(){
+
+    public void overwriteTasktxtFile() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
             for (Task task : currentUser.getTasks()) {
@@ -574,6 +575,12 @@ public class Appflow {
 
     // menu 2: schedule
     public void schedule() {
+        Collections.sort(currentUser.getSchedules(), new Comparator<Item>() {
+            @Override
+            public int compare(Item one, Item two) {
+                return one.getDate().compareTo(two.getDate());
+            }
+        });
         System.out.println("======= SCHEDULE =======");
         System.out.println("1. Create Schedule");
         System.out.println("2. Edit Schedule");
@@ -603,6 +610,7 @@ public class Appflow {
     }
 
     public void createSchedule() {
+        System.out.println("==== CREATE SCHEDULE ===");
         System.out.print("Enter title: ");
         String title = s.next() + s.nextLine();
         System.out.print("Enter description: ");
@@ -612,7 +620,7 @@ public class Appflow {
             System.out.println((i + 1) + ". " + categories.get(i).getName());
         }
         System.out.print("Choose: ");
-        int categoryChoice = errorHandling(0, categories.size());
+        int categoryChoice = errorHandling(1, categories.size());
         Category selectedCategory = categories.get(categoryChoice - 1);
         System.out.print("Enter date (dd-MM-yyyy): ");
         String date = s.next() + s.nextLine();
@@ -636,29 +644,143 @@ public class Appflow {
             System.out.println(" ");
 
         }
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Schedules.txt"));
+            for (Schedule schedule : currentUser.getSchedules()) {
+                writer.write(schedule.getTitle() + "\n");
+                writer.write(schedule.getDesc() + "\n");
+                writer.write(schedule.getCategory() + "\n");
+                writer.write(dateFormat.format(schedule.getDate()) + "\n");
+                writer.write(schedule.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm")) + "\n");
+                writer.write(schedule.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm")) + "\n");
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void editSchedule() {
+        System.out.println("===== EDIT SCHEDULE ====");
+        if (currentUser.getSchedules().isEmpty()) {
+            System.out.println("No schedules available...");
+            return;
+        } else {
+            displaySch();
+            System.out.print("[0] Back\nChoice: ");
+            int choice = errorHandling(0, currentUser.getSchedules().size());
+            if (choice != 0) {
+                choice--;
+                Schedule chosen = currentUser.getSchedules().get(choice);
+                System.out.println("== Schedule details ==");
+                System.out.println("1. Title: " + chosen.getTitle());
+                System.out.println("2. Desc: " + chosen.getDesc());
+                System.out.println("3. Category: " + chosen.getCategory());
+                System.out.println("4. Date: " + chosen.getDate());
+                System.out.println("5. Time Start: " + chosen.getStartTime());
+                System.out.println("6. Time End: " + chosen.getEndTime());
+                System.out.println("What would you like to edit?");
+                int editChoice = errorHandling(0, 6);
+                switch (editChoice) {
+                    case 1:
+                        //name
+                        System.out.println("Current Title: " + chosen.getTitle());
+                        System.out.print("New Title: ");
+                        chosen.setTitle(s.next() + s.nextLine());
+                        System.out.println("Successfully Changed Title!");
+                        break;
+                    case 2:
+                        //description
+                        System.out.println("Current Description: " + chosen.getDesc());
+                        System.out.print("New Description: ");
+                        chosen.setDesc(s.next() + s.nextLine());
+                        System.out.println("Successfully Changed Description!");
+                        break;
+                    case 3:
+                        //category
+                        System.out.println("Current Category: " + chosen.getCategory());
+                        System.out.println("New Category: ");
+                        for (int i = 0; i < categories.size(); i++) {
+                            System.out.println((i + 1) + ". " + categories.get(i).getName());
+                        }
+                        System.out.print("Input: ");
+                        int input = errorHandling(1, categories.size());
+                        Category newCategory = categories.get(input - 1);
+                        chosen.setCategory(newCategory.getName());
+                        System.out.println("Successfully Changed Category!");
+                        break;
+                    case 4:
+                        //date
+                        System.out.println("Current date: " + chosen.getDate());
+                        System.out.print("Enter new date (dd-MM-yyyy): ");
+                        String deadlineStr = s.next() + s.nextLine();
+                        try {
+                            Date deadline = dateFormat.parse(deadlineStr);
+                            chosen.setDate(deadline);
+                            chosen.setDateStr(deadlineStr);
+                            System.out.println("Successfully Changed Date!");
+                        } catch (ParseException e) {
+                            System.out.println("Invalid date format. Please try again.");
+                        }
+                        break;
+                    case 5:
+                        // Start time
+                        System.out.println("Current start time: " + chosen.getStartTime().format(timeFormatter));
+                        System.out.print("Enter new start time (HH:mm): ");
+                        String startTimeStr = s.next() + s.nextLine();
+                        try {
+                            LocalTime newStartTime = LocalTime.parse(startTimeStr, timeFormatter);
+                            chosen.setStartTime(newStartTime);
+                            System.out.println("Successfully Changed Start Time!");
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid time format. Please try again.");
+                        }
+                        break;
 
-    }
+                    case 6:
+                        // End time
+                        System.out.println("Current end time: " + chosen.getEndTime().format(timeFormatter));
+                        System.out.print("Enter new end time (HH:mm): ");
+                        String endTimeStr = s.next() + s.nextLine();
+                        try {
+                            LocalTime newEndTime = LocalTime.parse(endTimeStr, timeFormatter);
+                            chosen.setEndTime(newEndTime);
+                            System.out.println("Successfully Changed End Time!");
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid time format. Please try again.");
+                        }
+                        break;
+                }
 
-    public void delSchedule() {
-        int i = 1;
-        for (Schedule schedule : currentUser.getSchedules()) {
-            System.out.println("[" + i + "] " + schedule.getTitle());
+                overwriteSchtxtFile();
+            } else {
+                return;
+            }
         }
-        System.out.print("Choice: ");
-        int choice = errorHandling(1, currentUser.getSchedules().size());
-        System.out.println("Deleting " + currentUser.getSchedules().get(choice - 1).getTitle());
-        currentUser.getSchedules().remove(choice - 1);
-        System.out.println("Deleted!");
     }
 
-    public void viewSchedule() {
+    public void overwriteSchtxtFile() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Schedules.txt"));
+            for (Schedule schedule : currentUser.getSchedules()) {
+                writer.write(schedule.getTitle() + "\n");
+                writer.write(schedule.getDesc() + "\n");
+                writer.write(schedule.getCategory() + "\n");
+                writer.write(schedule.getDateStr() + "\n");
+                writer.write(schedule.getStartTime() + "\n");
+                writer.write(schedule.getEndTime() + "\n");
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void displaySch() {
         SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        System.out.println("== View All Schedules ==");
         int i = 1;
         for (Schedule schedule : currentUser.getSchedules()) {
             String formattedDate = outputDateFormat.format(schedule.getDate());
@@ -673,18 +795,52 @@ public class Appflow {
             System.out.println(" ");
             i++;
         }
+    }
 
-        System.out.print("Is there any schedule that is finished [Y/N]? ");
-        String a = s.next() + s.nextLine();
-        if (a.equalsIgnoreCase("Y")) {
-            System.out.print("Which schedule is finished? ");
-            int noSch = errorHandling(1, currentUser.getSchedules().size());
-            currentUser.getSchedules().remove(noSch - 1);
-            System.out.println("Schedule completed!");
-        } else if (a.equalsIgnoreCase("N")) {
-            schedule();
+    public void delSchedule() {
+        System.out.println("==== DELETE SCHEDULE ===");
+        if (currentUser.getSchedules().isEmpty()) {
+            System.out.println("No schedules available...");
+            return;
         } else {
-            System.out.println("Please input Y/N!");
+            int i = 1;
+            for (Schedule schedule : currentUser.getSchedules()) {
+                System.out.println("[" + i + "] " + schedule.getTitle());
+            }
+            System.out.print("[0] Back\nChoice: ");
+            int choice = errorHandling(0, currentUser.getSchedules().size());
+            if (choice != 0) {
+                System.out.println("Deleting " + currentUser.getSchedules().get(choice - 1).getTitle());
+                currentUser.getSchedules().remove(choice - 1);
+                System.out.println("Deleted!");
+                overwriteSchtxtFile();
+            } else {
+                return;
+            }
+        }
+    }
+
+    public void viewSchedule() {
+        System.out.println("== View All Schedules ==");
+        if (currentUser.getSchedules().isEmpty()) {
+            System.out.println("No schedules available...");
+            return;
+        } else {
+            displaySch();
+
+            System.out.print("Is there any schedule that is finished [Y/N]? ");
+            String a = s.next() + s.nextLine();
+            if (a.equalsIgnoreCase("Y")) {
+                System.out.print("Which schedule is finished? ");
+                int noSch = errorHandling(1, currentUser.getSchedules().size());
+                currentUser.getSchedules().remove(noSch - 1);
+                System.out.println("Schedule completed!");
+            } else if (a.equalsIgnoreCase("N")) {
+                System.out.println(" ");
+                schedule();
+            } else {
+                System.out.println("Please input Y/N!");
+            }
         }
     }
 
@@ -773,6 +929,8 @@ public class Appflow {
             num = s.nextInt();
             while (num < lower || num > upper) {
                 System.out.println("Invalid choice! please reinput");
+                System.out.println(" ");
+                System.out.print("Choice: ");
                 num = s.nextInt();
             }
         } catch (InputMismatchException e) {
