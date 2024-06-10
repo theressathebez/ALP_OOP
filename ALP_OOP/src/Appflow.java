@@ -288,20 +288,7 @@ public class Appflow {
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
         }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
-            for (Task task : currentUser.getTasks()) {
-                writer.write(task.getTitle() + "\n");
-                writer.write(task.getDesc() + "\n");
-                writer.write(task.getCategory() + "\n");
-                writer.write(task.getDateStr() + "\n");
-                writer.write(task.getPriorityStatus() + "\n");
-                writer.write(task.getProgressStatus() + "\n");
-            }
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        overwriteTasktxtFile();
     }
 
     public void editTask() {
@@ -401,20 +388,7 @@ public class Appflow {
                     break;
             }
 
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
-                for (Task task : currentUser.getTasks()) {
-                    writer.write(task.getTitle() + "\n");
-                    writer.write(task.getDesc() + "\n");
-                    writer.write(task.getCategory() + "\n");
-                    writer.write(task.getDateStr() + "\n");
-                    writer.write(task.getPriorityStatus() + "\n");
-                    writer.write(task.getProgressStatus() + "\n");
-                }
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            overwriteTasktxtFile();
         } else {
             return;
         }
@@ -429,20 +403,7 @@ public class Appflow {
         System.out.println("Deleting " + currentUser.getTasks().get(choice).getTitle());
         currentUser.getTasks().remove(currentUser.getTasks().get(choice));
         System.out.println("Deleted!");
-        try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
-                for (Task task : currentUser.getTasks()) {
-                    writer.write(task.getTitle() + "\n");
-                    writer.write(task.getDesc() + "\n");
-                    writer.write(task.getCategory() + "\n");
-                    writer.write(task.getDateStr() + "\n");
-                    writer.write(task.getPriorityStatus() + "\n");
-                    writer.write(task.getProgressStatus() + "\n");
-                }
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        overwriteTasktxtFile();
     }
 
     public void viewTask() {
@@ -472,6 +433,10 @@ public class Appflow {
         int i = 1;
         for (Task task : currentUser.getTasks()) {
             System.out.println("===================");
+            if(currentUser.getTasks().isEmpty()){
+                System.out.println("No Tasks!");
+                return;
+            }
             System.out.println("[" + i + "] " + task.getTitle());
             System.out.println("'" + task.getDesc() + "'");
             System.out.println("Categories : ");
@@ -485,6 +450,10 @@ public class Appflow {
 
     public void displayTaskbyPriority() {
         System.out.println("== All Tasks by Priority ==");
+        if(currentUser.getTasks().isEmpty()){
+            System.out.println("No Tasks!");
+            return;
+        }
         int i = 1;
         System.out.println("== \u001B[31m RED \u001B[0m ==");
         for (Task task : currentUser.getTasks()) {
@@ -529,6 +498,10 @@ public class Appflow {
 
     public void displayTaskbyProgress() {
         System.out.println("== All Tasks by Progress ==");
+        if(currentUser.getTasks().isEmpty()){
+            System.out.println("No Tasks!");
+            return;
+        }
         int i = 1;
         System.out.println("== NOT STARTED ==");
         for (Task task : currentUser.getTasks()) {
@@ -578,6 +551,23 @@ public class Appflow {
             System.out.println("\u001B[33m" + task.getPriorityStatus() + "\u001B[0m");
         } else if (task.getPriorityStatus() == PriorityStatus.RED) {
             System.out.println("\u001B[31m" + task.getPriorityStatus() + "\u001B[0m");
+        }
+    }
+    
+    public void overwriteTasktxtFile(){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
+            for (Task task : currentUser.getTasks()) {
+                writer.write(task.getTitle() + "\n");
+                writer.write(task.getDesc() + "\n");
+                writer.write(task.getCategory() + "\n");
+                writer.write(task.getDateStr() + "\n");
+                writer.write(task.getPriorityStatus() + "\n");
+                writer.write(task.getProgressStatus() + "\n");
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
