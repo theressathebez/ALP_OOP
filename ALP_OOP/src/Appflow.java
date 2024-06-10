@@ -51,7 +51,7 @@ public class Appflow {
             }
             reader.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("");
         } catch (IOException ex) {
             Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -154,7 +154,7 @@ public class Appflow {
                         Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, "Invalid date format in file", e);
                         continue;
                     }
-                    Task newTask = new Task(title, desc, category, date);
+                    Task newTask = new Task(title, desc, category, date, dateStr);
                     String priority = reader.readLine();
                     if (priority.equalsIgnoreCase("GREEN")) {
                         newTask.setPriorityStatus(PriorityStatus.GREEN);
@@ -175,7 +175,7 @@ public class Appflow {
                 }
                 reader.close();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("File not inserted");;
             } catch (IOException ex) {
                 Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -283,7 +283,7 @@ public class Appflow {
         String deadlineStr = s.next() + s.nextLine();
         try {
             Date deadline = dateFormat.parse(deadlineStr);
-            currentUser.addTask(title, description, selectedCategory.getName(), deadline);
+            currentUser.addTask(title, description, selectedCategory.getName(), deadline, deadlineStr);
             System.out.println("Task added successfully!");
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
@@ -294,7 +294,7 @@ public class Appflow {
                 writer.write(task.getTitle() + "\n");
                 writer.write(task.getDesc() + "\n");
                 writer.write(task.getCategory() + "\n");
-                writer.write(task.getDeadline() + "\n");
+                writer.write(task.getDateStr() + "\n");
                 writer.write(task.getPriorityStatus() + "\n");
                 writer.write(task.getProgressStatus() + "\n");
             }
@@ -407,7 +407,7 @@ public class Appflow {
                     writer.write(task.getTitle() + "\n");
                     writer.write(task.getDesc() + "\n");
                     writer.write(task.getCategory() + "\n");
-                    writer.write(task.getDeadline() + "\n");
+                    writer.write(task.getDateStr() + "\n");
                     writer.write(task.getPriorityStatus() + "\n");
                     writer.write(task.getProgressStatus() + "\n");
                 }
@@ -424,10 +424,25 @@ public class Appflow {
         displayTask();
         System.out.println("0. Back");
         System.out.print("Choice: ");
-        int choice = errorHandling(1, currentUser.getTasks().size());
+        int choice = errorHandling(0, currentUser.getTasks().size());
+        choice--;
         System.out.println("Deleting " + currentUser.getTasks().get(choice).getTitle());
-        currentUser.getTasks().remove(choice);
+        currentUser.getTasks().remove(currentUser.getTasks().get(choice));
         System.out.println("Deleted!");
+        try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Tasks.txt"));
+                for (Task task : currentUser.getTasks()) {
+                    writer.write(task.getTitle() + "\n");
+                    writer.write(task.getDesc() + "\n");
+                    writer.write(task.getCategory() + "\n");
+                    writer.write(task.getDateStr() + "\n");
+                    writer.write(task.getPriorityStatus() + "\n");
+                    writer.write(task.getProgressStatus() + "\n");
+                }
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     public void viewTask() {
@@ -459,7 +474,8 @@ public class Appflow {
             System.out.println("===================");
             System.out.println("[" + i + "] " + task.getTitle());
             System.out.println("'" + task.getDesc() + "'");
-            System.out.println("Categories : \n");
+            System.out.println("Categories : ");
+            System.out.println(task.getCategory());
             System.out.println("* " + task.getDate());
             System.out.print("Priority: ");
             getPriorityStatusColour(task);
@@ -617,7 +633,7 @@ public class Appflow {
             Date dateObj = dateFormat.parse(date);
             LocalTime startTime = LocalTime.parse(start, timeFormatter);
             LocalTime endTime = LocalTime.parse(end, timeFormatter);
-            currentUser.addSchedule(title, description, selectedCategory.getName(), dateObj, startTime, endTime);
+            currentUser.addSchedule(title, description, selectedCategory.getName(), dateObj, date, startTime, endTime);
             System.out.println("Schedule added successfully!");
             System.out.println(" ");
             schedule();

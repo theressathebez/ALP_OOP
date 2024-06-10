@@ -3,14 +3,15 @@ import java.util.*;
 
 
 public class Item {
-    protected String title, desc, category;
+    protected String title, desc, category, dateStr;
     protected Date date;
 
-    public Item(String title, String desc, String category, Date date) {
+    public Item(String title, String desc, String category, Date date, String dateStr) {
         this.title = title;
         this.desc = desc;
         this.category = category;
         this.date = date;
+        this.dateStr = dateStr;
     }
 
     public String getTitle() {
@@ -43,6 +44,14 @@ public class Item {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDateStr() {
+        return dateStr;
+    }
+
+    public void setDateStr(String dateStr) {
+        this.dateStr = dateStr;
     }
 
     

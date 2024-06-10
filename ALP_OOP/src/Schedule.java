@@ -7,8 +7,8 @@ public class Schedule extends Item {
     private LocalTime startTime,endTime;
     private Date date;
 
-    public Schedule(String title, String desc, String category,Date date, LocalTime startTime, LocalTime endTime) {
-        super(title, desc, category, date);
+    public Schedule(String title, String desc, String category,Date date, String dateStr, LocalTime startTime, LocalTime endTime) {
+        super(title, desc, category, date, dateStr);
         this.startTime = startTime;
         this.endTime = endTime;
     }
