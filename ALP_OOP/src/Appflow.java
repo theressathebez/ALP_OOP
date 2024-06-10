@@ -363,6 +363,7 @@ public class Appflow {
                         Date deadline = dateFormat.parse(deadlineStr);
                         chosen.setDate(deadline);
                         chosen.setDeadline(deadline);
+                        chosen.setDateStr(deadlineStr);
                         System.out.println("Successfully Changed Deadline!");
                     } catch (ParseException e) {
                         System.out.println("Invalid date format. Please try again.");
