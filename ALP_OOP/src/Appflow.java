@@ -238,7 +238,7 @@ public class Appflow {
         System.out.println("0. Back");
         System.out.print("Choice: ");
         int choice = errorHandling(0, 4);
-        System.out.println(" ");
+        System.out.println("========================");
         switch (choice) {
             case 0:
                 menu();
@@ -256,13 +256,25 @@ public class Appflow {
                 System.out.println("1. Sort by Date");
                 System.out.println("2. Sort by Priority Status");
                 System.out.println("3. Sort by Progress Status");
-                int input = errorHandling(1, 3);
+                System.out.println("4. Sort by Category");
+                System.out.print("Choice: ");
+                int input = errorHandling(1, 4);
+                
                 if (input == 1) {
                     displayTask();
                 } else if (input == 2) {
                     displayTaskbyPriority();
                 } else if (input == 3) {
                     displayTaskbyProgress();
+                } else if (input == 4) {
+                    int i = 1;
+                    for (Category category : categories) {
+                        System.out.println(i + ". " + category.getName());
+                    }
+                    System.out.print("choice: ");
+                    int choose = errorHandling(1, categories.size());
+                    choose--;
+                    displayTaskbyCategory(choose);
                 }
                 break;
         }
@@ -333,6 +345,8 @@ public class Appflow {
                     }
                     System.out.print("Input: ");
                     int input = errorHandling(1, categories.size());
+                    input--;
+                    chosen.setCategory(categories.get(input).getName());
                     System.out.println("Successfully Changed Category!");
                     break;
                 case 4:
@@ -392,7 +406,7 @@ public class Appflow {
 
             overwriteTasktxtFile();
         } else {
-            return;
+            task();
         }
     }
 
@@ -534,6 +548,22 @@ public class Appflow {
         System.out.println("== DONE ==");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.DONE) {
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n");
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+            }
+        }
+    }
+
+    public void displayTaskbyCategory(int categoryList) {
+        int i = 1;
+        for (Task task : currentUser.getTasks()) {
+            if (task.getCategory().equals(categories.indexOf(categoryList))) {
                 System.out.println("===================");
                 System.out.println("[" + i + "] " + task.getTitle());
                 System.out.println("'" + task.getDesc() + "'");
