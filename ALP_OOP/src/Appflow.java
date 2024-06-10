@@ -642,7 +642,7 @@ public class Appflow {
                 System.out.println("===================");
                 System.out.println("[" + i + "] " + task.getTitle());
                 System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
+                System.out.println("Categories : \n" + task.getCategory());
                 System.out.println("* " + task.getDate());
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
