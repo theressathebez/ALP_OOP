@@ -532,6 +532,18 @@ public class Appflow {
             i++;
         }
     }
+    
+    public void displayTaskSorted(Task task, int i){
+        System.out.println("===================");
+                System.out.println("[" + i + "] " + task.getTitle());
+                System.out.println("'" + task.getDesc() + "'");
+                System.out.println("Categories : \n" + task.getCategory());
+                System.out.println("* " + task.getDate());
+                System.out.print("Priority: ");
+                getPriorityStatusColour(task);
+                System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
+    }
 
     public void displayTaskbyPriority() {
         System.out.println("== All Tasks by Priority ==");
@@ -543,43 +555,19 @@ public class Appflow {
         System.out.println("== \u001B[31m RED \u001B[0m ==");
         for (Task task : currentUser.getTasks()) {
             if (task.getPriorityStatus() == PriorityStatus.RED) {
-                System.out.println("===================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
         }
         System.out.println("== \u001B[33m YELLOW \u001B[0m ==");
         for (Task task : currentUser.getTasks()) {
             if (task.getPriorityStatus() == PriorityStatus.YELLOW) {
-                System.out.println("===================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task,i);
             }
         }
         System.out.println("== \u001B[32m GREEN \u001B[0m ==");
         for (Task task : currentUser.getTasks()) {
             if (task.getPriorityStatus() == PriorityStatus.GREEN) {
-                System.out.println("===================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
         }
     }
@@ -594,44 +582,20 @@ public class Appflow {
         System.out.println("===== NOT STARTED =====");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.NOT_STARTED) {
-                System.out.println("===================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
         }
         System.out.println("===== IN PROGRESS =====");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
-                System.out.println("====================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
             System.out.println("");
         }
         System.out.println("====== DONE ======");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.DONE) {
-                System.out.println("====================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n");
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
             System.out.println("");
         }
@@ -641,15 +605,7 @@ public class Appflow {
         int i = 1;
         for (Task task : currentUser.getTasks()) {
             if (task.getCategory().equals(categories.indexOf(categoryList))) {
-                System.out.println("===================");
-                System.out.println("[" + i + "] " + task.getTitle());
-                System.out.println("'" + task.getDesc() + "'");
-                System.out.println("Categories : \n" + task.getCategory());
-                System.out.println("* " + task.getDate());
-                System.out.print("Priority: ");
-                getPriorityStatusColour(task);
-                System.out.println("** " + task.getProgressStatus() + " ** \n");
-                i++;
+                displayTaskSorted(task, i);
             }
         }
         System.out.println("");
