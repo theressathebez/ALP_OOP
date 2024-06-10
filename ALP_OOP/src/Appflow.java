@@ -144,7 +144,7 @@ public class Appflow {
                             Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, "Invalid date format in file", e);
                             continue;
                         }
-                        Task newTask = new Task(title, desc, category,PriorityStatus.GREEN, date, dateStr);
+                        Task newTask = new Task(title, desc, category, PriorityStatus.GREEN, date, dateStr);
                         String priority = reader.readLine();
                         if (priority.equalsIgnoreCase("GREEN")) {
                             newTask.setPriorityStatus(PriorityStatus.GREEN);
@@ -248,6 +248,7 @@ public class Appflow {
             for (int i = 0; i < Math.min(5, sortedTasks.size()); i++) {
                 Task task = sortedTasks.get(i);
                 System.out.println("[" + (i + 1) + "] " + task.getTitle() + "[" + task.getPriorityStatus() + "]");
+                
                 System.out.println("    Deadline: " + dateFormat.format(task.getDate()));
                 System.out.println("------------------------");
             }
@@ -272,7 +273,6 @@ public class Appflow {
                 System.out.println("    ----------------------");
             }
         }
-        System.out.println("========================");
     }
 
     // menu 1: task
@@ -695,7 +695,7 @@ public class Appflow {
         System.out.println("0. Back");
         System.out.print("Choice: ");
         int choice = errorHandling(0, 4);
-        System.out.println("========================");
+        System.out.println(" ");
         switch (choice) {
             case 0:
                 menu();
@@ -928,24 +928,65 @@ public class Appflow {
 
     public void viewSchedule() {
         System.out.println("== View All Schedules ==");
+
         if (currentUser.getSchedules().isEmpty()) {
             System.out.println("No schedules available...");
             return;
         } else {
-            displaySch();
+            System.out.println("1. Sort by Date");
+            System.out.println("2. Sort by Category");
+            System.out.print("Choice: ");
+            int input = errorHandling(1, 2);
 
-            System.out.print("Is there any schedule that is finished [Y/N]? ");
-            String a = s.next() + s.nextLine();
-            if (a.equalsIgnoreCase("Y")) {
-                System.out.print("Which schedule is finished? ");
-                int noSch = errorHandling(1, currentUser.getSchedules().size());
-                currentUser.getSchedules().remove(noSch - 1);
-                System.out.println("Schedule completed!");
-            } else if (a.equalsIgnoreCase("N")) {
-                System.out.println(" ");
-                schedule();
-            } else {
-                System.out.println("Please input Y/N!");
+            if (input == 1) {
+                System.out.println("== SORT BY DATE ==");
+                displaySch();
+                System.out.print("Is there any schedule that is finished [Y/N]? ");
+                String a = s.next() + s.nextLine();
+                if (a.equalsIgnoreCase("Y")) {
+                    System.out.print("Which schedule is finished? ");
+                    int noSch = errorHandling(1, currentUser.getSchedules().size());
+                    currentUser.getSchedules().remove(noSch - 1);
+                    System.out.println("Schedule completed!");
+                } else if (a.equalsIgnoreCase("N")) {
+                    System.out.println(" ");
+                    schedule();
+                } else {
+                    System.out.println("Please input Y/N!");
+                }
+            } else if (input == 2) {
+                System.out.println("== SORT BY CATEGORY ==");
+                int i = 1;
+                for (Category category : categories) {
+                    System.out.println(i + ". " + category.getName());
+                    i++;
+                }
+                System.out.print("choice: ");
+                int choose = errorHandling(1, categories.size());
+                choose--;
+                displaySchbyCategory(choose);
+            }
+
+        }
+    }
+
+    public void displaySchbyCategory(int categoryList) {
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("EEEE, dd MMM yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        int i = 1;
+        for (Schedule schedule : currentUser.getSchedules()) {
+            if (schedule.getCategory().equals(categories.indexOf(categoryList))) {
+                String formattedDate = outputDateFormat.format(schedule.getDate());
+                String formattedStartTime = schedule.getStartTime().format(timeFormatter);
+                String formattedEndTime = schedule.getEndTime().format(timeFormatter);
+
+                System.out.println("===================");
+                System.out.println("[" + i + "] " + schedule.getTitle());
+                System.out.println("'" + schedule.getDesc() + "'");
+                System.out.println("Categories: " + schedule.getCategory());
+                System.out.println("Date: " + formattedDate);
+                System.out.println("Time: " + formattedStartTime + " - " + formattedEndTime);
+                i++;
             }
         }
     }
