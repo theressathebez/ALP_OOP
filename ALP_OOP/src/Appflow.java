@@ -591,7 +591,7 @@ public class Appflow {
             return;
         }
         int i = 1;
-        System.out.println("== NOT STARTED ==");
+        System.out.println("===== NOT STARTED =====");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.NOT_STARTED) {
                 System.out.println("===================");
@@ -605,10 +605,10 @@ public class Appflow {
                 i++;
             }
         }
-        System.out.println("== IN PROGRESS ==");
+        System.out.println("===== IN PROGRESS =====");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
-                System.out.println("===================");
+                System.out.println("====================");
                 System.out.println("[" + i + "] " + task.getTitle());
                 System.out.println("'" + task.getDesc() + "'");
                 System.out.println("Categories : \n");
@@ -618,11 +618,12 @@ public class Appflow {
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
                 i++;
             }
+            System.out.println("");
         }
-        System.out.println("== DONE ==");
+        System.out.println("====== DONE ======");
         for (Task task : currentUser.getTasks()) {
             if (task.getProgressStatus() == ProgressStatus.DONE) {
-                System.out.println("===================");
+                System.out.println("====================");
                 System.out.println("[" + i + "] " + task.getTitle());
                 System.out.println("'" + task.getDesc() + "'");
                 System.out.println("Categories : \n");
@@ -632,6 +633,7 @@ public class Appflow {
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
                 i++;
             }
+            System.out.println("");
         }
     }
 
@@ -650,6 +652,7 @@ public class Appflow {
                 i++;
             }
         }
+        System.out.println("");
     }
 
     public void getPriorityStatusColour(Task task) {
