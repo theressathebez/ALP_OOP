@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Appflow {
 
@@ -180,7 +181,7 @@ public class Appflow {
     public void menu() {
         while (true) {
             System.out.println(" ");
-            System.out.println("== MY STUDY ASSISTANT ==");
+            System.out.println("** MY STUDY ASSISTANT **");
             dashboard();
             System.out.println(" ");
             System.out.println("========= MENU =========");
@@ -211,14 +212,67 @@ public class Appflow {
 
     // dashboard
     public void dashboard() {
+        System.out.println("========================");
+        System.out.println("       DASHBOARD        ");
+        System.out.println("========================");
+        System.out.println("Tasks Summary:");
+        int notStarted = 0, inProgress = 0, done = 0;
+        for (Task task : currentUser.getTasks()) {
+            switch (task.getProgressStatus()) {
+                case NOT_STARTED:
+                    notStarted++;
+                    break;
+                case IN_PROGRESS:
+                    inProgress++;
+                    break;
+                case DONE:
+                    done++;
+                    break;
+            }
+        }
+        System.out.println("  Not Started:  " + notStarted);
+        System.out.println("  In Progress:  " + inProgress);
+        System.out.println("  Done:         " + done);
+        System.out.println("------------------------");
 
-//        System.out.println(" ");
-//        System.out.println("== CREATE NEW CATEGORY ==");
-//        System.out.print("Enter Category name: ");
-//        String name = s.next() + s.nextLine();
-//        categories.add(new Category(name));
-//        System.out.println("========================");
-//        System.out.println(" ");
+        // Display 5 Most Urgent Tasks
+        System.out.println("Top 5 Urgent Tasks:");
+        List<Task> sortedTasks = currentUser.getTasks().stream()
+                .sorted(Comparator.comparing(Task::getPriorityStatus)
+                        .thenComparing(Task::getDate))
+                .collect(Collectors.toList());
+
+        if (sortedTasks.isEmpty()) {
+            System.out.println("  No upcoming schedules.");
+        } else {
+            for (int i = 0; i < Math.min(5, sortedTasks.size()); i++) {
+                Task task = sortedTasks.get(i);
+                System.out.println("[" + (i + 1) + "] " + task.getTitle() + "[" + task.getPriorityStatus() + "]");
+                System.out.println("    Deadline: " + dateFormat.format(task.getDate()));
+                System.out.println("------------------------");
+            }
+        }
+
+        System.out.println("Upcoming Schedules:");
+        List<Schedule> upcomingSchedules = currentUser.getSchedules().stream()
+                .filter(schedule -> !schedule.getDate().before(new Date()))
+                .sorted(Comparator.comparing(Schedule::getDate))
+                .collect(Collectors.toList());
+
+        if (upcomingSchedules.isEmpty()) {
+            System.out.println("  No upcoming schedules.");
+        } else {
+            for (Schedule schedule : upcomingSchedules) {
+                String formattedDate = dateFormat.format(schedule.getDate());
+                String formattedStartTime = schedule.getStartTime().format(timeFormatter);
+                String formattedEndTime = schedule.getEndTime().format(timeFormatter);
+                System.out.println("  - " + schedule.getTitle());
+                System.out.println("    Date: " + formattedDate);
+                System.out.println("    Time: " + formattedStartTime + " - " + formattedEndTime);
+                System.out.println("    ----------------------");
+            }
+        }
+        System.out.println("========================");
     }
 
     // menu 1: task
