@@ -239,7 +239,8 @@ public class Appflow {
         System.out.println("Top 5 Urgent Tasks:");
         List<Task> sortedTasks = currentUser.getTasks().stream()
                 .sorted(Comparator.comparing(Task::getPriorityStatus)
-                        .thenComparing(Task::getDate))
+                        .thenComparing(Task::getDate)
+                        .thenComparing(Comparator.comparing(Task::getPriorityStatus))) // Sort based on priority status
                 .collect(Collectors.toList());
 
         if (sortedTasks.isEmpty()) {
@@ -248,7 +249,6 @@ public class Appflow {
             for (int i = 0; i < Math.min(5, sortedTasks.size()); i++) {
                 Task task = sortedTasks.get(i);
                 System.out.println("[" + (i + 1) + "] " + task.getTitle() + "[" + task.getPriorityStatus() + "]");
-                
                 System.out.println("    Deadline: " + dateFormat.format(task.getDate()));
                 System.out.println("------------------------");
             }
@@ -731,29 +731,48 @@ public class Appflow {
         System.out.print("Choose: ");
         int categoryChoice = errorHandling(1, categories.size());
         Category selectedCategory = categories.get(categoryChoice - 1);
-        System.out.print("Enter date (dd-MM-yyyy): ");
-        String date = s.next() + s.nextLine();
-        System.out.print("Enter start time (HH:mm): ");
-        String start = s.next() + s.nextLine();
-        System.out.print("Enter end time (HH:mm): ");
-        String end = s.next() + s.nextLine();
-        try {
-            Date dateObj = dateFormat.parse(date);
-            LocalTime startTime = LocalTime.parse(start, timeFormatter);
-            LocalTime endTime = LocalTime.parse(end, timeFormatter);
-            currentUser.addSchedule(title, description, selectedCategory.getName(), dateObj, date, startTime, endTime);
-            System.out.println("Schedule added successfully!");
-            System.out.println(" ");
-            schedule();
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please try again.");
-            System.out.println(" ");
-        } catch (DateTimeParseException e) {
-            System.out.println("Invalid time format. Please try again.");
-            System.out.println(" ");
 
+        Date dateObj = null;
+        LocalTime startTime = null;
+        LocalTime endTime = null;
+        boolean validDateTime = false;
+
+        while (!validDateTime) {
+            try {
+                System.out.print("Enter date (dd-MM-yyyy): ");
+                String date = s.next() + s.nextLine();
+                dateObj = dateFormat.parse(date);
+
+                System.out.print("Enter start time (HH:mm): ");
+                String start = s.next() + s.nextLine();
+                startTime = LocalTime.parse(start, timeFormatter);
+
+                System.out.print("Enter end time (HH:mm): ");
+                String end = s.next() + s.nextLine();
+                endTime = LocalTime.parse(end, timeFormatter);
+
+                // Validation: End time must be after start time
+                if (endTime.isAfter(startTime)) {
+                    validDateTime = true;
+                } else {
+                    System.out.println("End time must be after start time. Please try again.");
+                    System.out.println();
+                }
+
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter date in dd-MM-yyyy format.");
+                System.out.println();
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid time format. Please enter time in HH:mm format.");
+                System.out.println();
+            }
         }
 
+        currentUser.addSchedule(title, description, selectedCategory.getName(), dateObj, dateFormat.format(dateObj), startTime, endTime);
+        System.out.println("Schedule added successfully!");
+        System.out.println();
+
+        // Writing schedule to file
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(currentUser.getUsername() + "Schedules.txt"));
             for (Schedule schedule : currentUser.getSchedules()) {
@@ -978,7 +997,7 @@ public class Appflow {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         int i = 1;
         for (Schedule schedule : currentUser.getSchedules()) {
-            if (schedule.getCategory().equals(categories.indexOf(categoryList))) {
+            if (schedule.getCategory().equals(categories.get(categoryList).getName())) {
                 String formattedDate = outputDateFormat.format(schedule.getDate());
                 String formattedStartTime = schedule.getStartTime().format(timeFormatter);
                 String formattedEndTime = schedule.getEndTime().format(timeFormatter);
@@ -1014,21 +1033,22 @@ public class Appflow {
             }
         });
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         //page
         for (int i = startIndex; i < endIndex && i < items.size(); i++) {
             Item item = items.get(i);
-            System.out.println("== " + item.getDate() + " ==");
+            System.out.println("== " + dateFormat.format(item.getDate()) + " ==");
             if (item instanceof Task) {
                 Task taskItem = (Task) item;
                 System.out.println((i + 1) + ". " + taskItem.getTitle());
-                System.out.println("Deadline: " + taskItem.getDeadline());
+                System.out.println("Deadline: " + dateFormat.format(taskItem.getDeadline()));
                 System.out.println("Category: " + taskItem.getCategory());
                 System.out.println("Priority: " + taskItem.getPriorityStatus());
                 System.out.println("Progress: " + taskItem.getProgressStatus());
             } else if (item instanceof Schedule) {
                 Schedule scheduleItem = (Schedule) item;
                 System.out.println((i + 1) + ". " + scheduleItem.getTitle());
-                System.out.println("Date: " + scheduleItem.getDate());
+                System.out.println("Date: " + dateFormat.format(scheduleItem.getDate()));
                 System.out.println("Start Time: " + scheduleItem.getStartTime());
                 System.out.println("End Time: " + scheduleItem.getEndTime());
                 System.out.println("Category: " + scheduleItem.getCategory());
