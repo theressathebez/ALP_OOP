@@ -128,6 +128,46 @@ public class Appflow {
                 System.out.println("Login Successful! Welcome back " + user.getName() + "~");
                 System.out.println(" ");
                 currentUser = user;
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(currentUser.getUsername() + "Tasks.txt"));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String title = line;
+                        String desc = reader.readLine();
+                        String category = reader.readLine();
+                        String dateStr = reader.readLine();
+                        Date date = null;
+                        try {
+                            date = dateFormat.parse(dateStr);
+                        } catch (ParseException e) {
+                            Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, "Invalid date format in file", e);
+                            continue;
+                        }
+                        Task newTask = new Task(title, desc, category,PriorityStatus.GREEN, date, dateStr);
+                        String priority = reader.readLine();
+                        if (priority.equalsIgnoreCase("GREEN")) {
+                            newTask.setPriorityStatus(PriorityStatus.GREEN);
+                        } else if (priority.equalsIgnoreCase("YELLOW")) {
+                            newTask.setPriorityStatus(PriorityStatus.YELLOW);
+                        } else if (priority.equalsIgnoreCase("RED")) {
+                            newTask.setPriorityStatus(PriorityStatus.RED);
+                        }
+                        String progress = reader.readLine();
+                        if (progress.equalsIgnoreCase("NOT_STARTED")) {
+                            newTask.setProgressStatus(ProgressStatus.NOT_STARTED);
+                        } else if (progress.equalsIgnoreCase("IN_PROGRESS")) {
+                            newTask.setProgressStatus(ProgressStatus.IN_PROGRESS);
+                        } else if (progress.equalsIgnoreCase("DONE")) {
+                            newTask.setProgressStatus(ProgressStatus.DONE);
+                        }
+                        currentUser.getTasks().add(newTask);
+                    }
+                    reader.close();
+                } catch (FileNotFoundException ex) {
+
+                } catch (IOException ex) {
+                    Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 menu();
                 return;
             }
@@ -139,47 +179,6 @@ public class Appflow {
     // menu after logging in
     public void menu() {
         while (true) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(currentUser.getUsername() + "Tasks.txt"));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String title = line;
-                    String desc = reader.readLine();
-                    String category = reader.readLine();
-                    String dateStr = reader.readLine();
-                    Date date = null;
-                    try {
-                        date = dateFormat.parse(dateStr);
-                    } catch (ParseException e) {
-                        Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, "Invalid date format in file", e);
-                        continue;
-                    }
-                    Task newTask = new Task(title, desc, category, date, dateStr);
-                    String priority = reader.readLine();
-                    if (priority.equalsIgnoreCase("GREEN")) {
-                        newTask.setPriorityStatus(PriorityStatus.GREEN);
-                    } else if (priority.equalsIgnoreCase("YELLOW")) {
-                        newTask.setPriorityStatus(PriorityStatus.YELLOW);
-                    } else if (priority.equalsIgnoreCase("RED")) {
-                        newTask.setPriorityStatus(PriorityStatus.RED);
-                    }
-                    String progress = reader.readLine();
-                    if (progress.equalsIgnoreCase("NOT_STARTED")) {
-                        newTask.setProgressStatus(ProgressStatus.NOT_STARTED);
-                    } else if (progress.equalsIgnoreCase("IN_PROGRESS")) {
-                        newTask.setProgressStatus(ProgressStatus.IN_PROGRESS);
-                    } else if (progress.equalsIgnoreCase("DONE")) {
-                        newTask.setProgressStatus(ProgressStatus.DONE);
-                    }
-                    currentUser.getTasks().add(newTask);
-                }
-                reader.close();
-            } catch (FileNotFoundException ex) {
-
-            } catch (IOException ex) {
-                Logger.getLogger(Appflow.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
             System.out.println(" ");
             System.out.println("== MY STUDY ASSISTANT ==");
             dashboard();
@@ -259,7 +258,7 @@ public class Appflow {
                 System.out.println("4. Sort by Category");
                 System.out.print("Choice: ");
                 int input = errorHandling(1, 4);
-                
+
                 if (input == 1) {
                     displayTask();
                 } else if (input == 2) {
@@ -270,6 +269,7 @@ public class Appflow {
                     int i = 1;
                     for (Category category : categories) {
                         System.out.println(i + ". " + category.getName());
+                        i++;
                     }
                     System.out.print("choice: ");
                     int choose = errorHandling(1, categories.size());
@@ -292,11 +292,25 @@ public class Appflow {
         System.out.print("Choose: ");
         int categoryChoice = errorHandling(1, categories.size());
         Category selectedCategory = categories.get(categoryChoice - 1);
+        System.out.println("Select Priority:");
+        System.out.println("1. \u001B[32m GREEN \u001B[0m");
+        System.out.println("2. \u001B[33m YELLOW \u001B[0m");
+        System.out.println("3. \u001B[31m RED \u001B[0m");
+        System.out.print("Choose: ");
+        int priorityStatChoice = errorHandling(1, 3);
+        PriorityStatus priorityStat = PriorityStatus.GREEN;
+        if (priorityStatChoice == 1) {
+            priorityStat = PriorityStatus.GREEN;
+        } else if (priorityStatChoice == 2) {
+            priorityStat = PriorityStatus.YELLOW;
+        } else {
+            priorityStat = PriorityStatus.RED;
+        }
         System.out.print("Enter date (dd-MM-yyyy): ");
         String deadlineStr = s.next() + s.nextLine();
         try {
             Date deadline = dateFormat.parse(deadlineStr);
-            currentUser.addTask(title, description, selectedCategory.getName(), deadline, deadlineStr);
+            currentUser.addTask(title, description, selectedCategory.getName(), priorityStat, deadline, deadlineStr);
             System.out.println("Task added successfully!");
         } catch (ParseException e) {
             System.out.println("Invalid date format. Please try again.");
@@ -461,6 +475,7 @@ public class Appflow {
             System.out.print("Priority: ");
             getPriorityStatusColour(task);
             System.out.println("** " + task.getProgressStatus() + " ** \n");
+            i++;
         }
     }
 
@@ -482,6 +497,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
         System.out.println("== \u001B[33m YELLOW \u001B[0m ==");
@@ -495,6 +511,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
         System.out.println("== \u001B[32m GREEN \u001B[0m ==");
@@ -508,6 +525,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
     }
@@ -530,6 +548,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
         System.out.println("== IN PROGRESS ==");
@@ -543,6 +562,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
         System.out.println("== DONE ==");
@@ -556,6 +576,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
     }
@@ -572,6 +593,7 @@ public class Appflow {
                 System.out.print("Priority: ");
                 getPriorityStatusColour(task);
                 System.out.println("** " + task.getProgressStatus() + " ** \n");
+                i++;
             }
         }
     }

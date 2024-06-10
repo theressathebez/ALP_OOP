@@ -60,8 +60,8 @@ public class User {
     }
 
     // create a new task
-    public void addTask(String title, String description, String category, Date deadline, String dateStr) {
-        Task newTask = new Task(title, description, category, deadline, dateStr);
+    public void addTask(String title, String description, String category,PriorityStatus priorityStat, Date deadline, String dateStr) {
+        Task newTask = new Task(title, description, category,priorityStat, deadline, dateStr);
         tasks.add(newTask);
     }
 

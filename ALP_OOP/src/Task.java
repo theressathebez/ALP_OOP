@@ -8,10 +8,10 @@ public class Task extends Item {
     private ProgressStatus progressStatus;
     private String dateStr;
 
-    public Task(String title, String desc, String category, Date date, String dateStr) {
+    public Task(String title, String desc, String category,PriorityStatus priorityStat, Date date, String dateStr) {
         super(title, desc, category, date, dateStr);
         this.deadline = date;
-        this.priorityStatus = PriorityStatus.GREEN;
+        this.priorityStatus = priorityStat;
         this.progressStatus = ProgressStatus.NOT_STARTED;
     }
 
